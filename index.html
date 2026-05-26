@@ -34,7 +34,7 @@
             position: relative;
         }
 
-        /* Subtle Secure Watermark Background */
+        /* Watermark Background */
         body::before {
             content: "PROPERTY OF RIZKY SIL 1806 - PATENTED SYSTEM";
             position: fixed;
@@ -57,7 +57,6 @@
             z-index: 1;
         }
 
-        /* Header Style */
         header {
             background: linear-gradient(135deg, var(--primary-color), #ff7657);
             color: white;
@@ -97,7 +96,6 @@
             transform: translateY(-2px);
         }
 
-        /* Main Grid Layout */
         .dashboard-grid {
             display: grid;
             grid-template-columns: 360px 1fr;
@@ -110,7 +108,6 @@
             }
         }
 
-        /* Card Panels */
         .card {
             background-color: var(--card-bg);
             border-radius: 10px;
@@ -129,7 +126,6 @@
             color: #222;
         }
 
-        /* Form Controls */
         .form-group {
             margin-bottom: 15px;
         }
@@ -162,7 +158,6 @@
             cursor: not-allowed;
         }
 
-        /* Status Badges */
         .status-badge {
             margin-top: 6px;
             padding: 6px 10px;
@@ -184,7 +179,6 @@
             display: block;
         }
 
-        /* Buttons Layout */
         .action-buttons {
             display: flex;
             gap: 10px;
@@ -218,7 +212,6 @@
             background-color: #c0392b;
         }
 
-        /* Table & Filtering View */
         .table-toolbar {
             display: flex;
             justify-content: space-between;
@@ -299,7 +292,6 @@
             background-color: #fafffa;
         }
 
-        /* Modal Overlay Styles */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -350,7 +342,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Copyright Footer */
         .secure-footer {
             text-align: center;
             margin-top: 40px;
@@ -361,7 +352,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* Full Screen Loading Overlay */
         .overlay {
             position: fixed;
             top: 0;
@@ -582,10 +572,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <script>
-
-        /* =========================================================================
-           📸 ENGINE PROCESSING JPG (SEPARATED VIEW & SAVE FUNCTION)
-           ========================================================================= */
         function processDashboardJpg(mode) {
             const selectedDate = document.getElementById('dateFilter').value || "Semua_Tanggal";
             const captureArea = document.getElementById('tableCardToCapture');
@@ -629,9 +615,6 @@
             });
         }
 
-        /* =========================================================================
-           ⚙️ CORE DASHBOARD ENGINE
-           ========================================================================= */
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxhLowM9ffwffPA-ssTLpvTzzWRDYVFrek1ySj_jZljgoVQlxB4WX8lep_fbF38687Yug/exec";
 
         let database = {
@@ -675,9 +658,6 @@
                 });
         }
 
-        // =========================================================================
-        // UTILITAS KONVERSI TANGGAL KE DD/MM/YYYY
-        // =========================================================================
         function formatDateToDDMMYYYY(dateStr) {
             if (!dateStr) return '';
             
@@ -794,7 +774,6 @@
                 const updatePosition = row['UPDATE POSITION'] || row['Update Position'] || '';
                 const status2 = (row['STATUS 2'] || row['Status 2'] || '').toUpperCase().trim();
                 
-                // Pembacaan kolom secara presisi untuk key 'TIME SB'
                 const timeSb = row['TIME SB'] || row['Time SB'] || row['time sb'] || '';
                 
                 const keterangan = row['KETERANGAN'] || '';
@@ -852,9 +831,8 @@
                                onchange="saveFieldInline(${rowIndex}, '${nopol}', 'STATUS 2', this.value)">
                     </td>
                     <td>
-                        <input type="text" class="form-control" style="padding: 4px 8px; font-size: 12px; height: 28px; width: 130px;" 
-                               value="${timeSb}" placeholder="00:00-24:00" 
-                               onchange="saveFieldInline(${rowIndex}, '${nopol}', 'TIME SB', this.value)">
+                        <input type="text" class="form-control" style="padding: 4px 8px; font-size: 12px; height: 28px; width: 130px; background-color: #f1f2f6; color: #7f8c8d; cursor: not-allowed;" 
+                               value="${timeSb}" placeholder="00:00-24:00" readonly>
                     </td>
                     <td><span style="font-size:12px; color:#555;">${keterangan}</span></td>
                 `;
@@ -892,9 +870,6 @@
             });
         }
 
-        // =========================================================================
-        // FUNGSI PENGHAPUSAN PRESISI (MODAL LOGIC)
-        // =========================================================================
         function openDeleteModal() {
             document.getElementById('deleteDateInput').valueAsDate = new Date();
             document.getElementById('deleteNopolInput').value = '';
@@ -916,7 +891,6 @@
 
             const targetDateStr = formatDateToDDMMYYYY(inputDateRaw);
 
-            // Verifikasi kecocokan data di dalam cache yang ditampilkan
             const targetRecord = database.logs.find(r => {
                 const rNopol = String(r['NOPOL'] || '').toUpperCase().trim();
                 const rDate = formatDateToDDMMYYYY(String(r['CORDER DATE'] || r['ORDER DATE'] || '').trim());
@@ -985,7 +959,7 @@
                 "STATUS 1": document.getElementById('status1Input').value,
                 "UPDATE POSITION": document.getElementById('updatePositionInput').value.trim(),
                 "STATUS 2": document.getElementById('status2Input').value.trim(),
-                "TIME SB": document.getElementById('timeSbInput').value.trim(), // Payload Input TIME SB
+                "TIME SB": document.getElementById('timeSbInput').value.trim(), 
                 "KETERANGAN": document.getElementById('keteranganInput').value.trim()
             };
 
@@ -998,7 +972,7 @@
                 if(result.status === 'success') {
                     document.getElementById('logForm').reset();
                     document.getElementById('orderDate').valueAsDate = new Date();
-                    document.getElementById('timeSbInput').value = ''; // Reset Form TIME SB
+                    document.getElementById('timeSbInput').value = ''; 
                     document.getElementById('nopolStatus').style.display = 'none';
                     fetchDashboardData();
                 } else {
