@@ -490,11 +490,6 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="timeSbInput">TIME SB</label>
-                            <input type="text" id="timeSbInput" class="form-control" placeholder="Contoh: 08:00-16:00 (Format: 00:00-24:00)">
-                        </div>
-
-                        <div class="form-group">
                             <label for="keteranganInput">Keterangan</label>
                             <textarea id="keteranganInput" class="form-control" rows="2" placeholder="Catatan opsional..."></textarea>
                         </div>
@@ -547,7 +542,6 @@
                                     <th>IN CUST</th>
                                     <th>OUT CUST</th>
                                     <th>STATUS 2</th>
-                                    <th>TIME SB</th>
                                     <th>KETERANGAN</th>
                                 </tr>
                             </thead>
@@ -754,7 +748,7 @@
             document.getElementById('rowCountText').innerText = `Menampilkan ${sortedLogs.length} data operasional`;
 
             if (sortedLogs.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="16" style="text-align:center; color:gray; padding:20px;">Tidak ada record data operasional yang cocok dengan filter.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="15" style="text-align:center; color:gray; padding:20px;">Tidak ada record data operasional yang cocok dengan filter.</td></tr>`;
                 return;
             }
 
@@ -773,8 +767,6 @@
                 const status1 = (row['STATUS 1'] || row['Status 1'] || 'OPEN').toUpperCase().trim();
                 const updatePosition = row['UPDATE POSITION'] || row['Update Position'] || '';
                 const status2 = (row['STATUS 2'] || row['Status 2'] || '').toUpperCase().trim();
-                
-                const timeSb = row['TIME SB'] || row['Time SB'] || row['time sb'] || '';
                 
                 const keterangan = row['KETERANGAN'] || '';
                 const rowIndex = row['ROW_INDEX'];
@@ -829,10 +821,6 @@
                         <input type="text" class="form-control" style="padding: 4px 8px; font-size: 12px; height: 28px; width: 130px;" 
                                value="${status2}" placeholder="Ketik status..." 
                                onchange="saveFieldInline(${rowIndex}, '${nopol}', 'STATUS 2', this.value)">
-                    </td>
-                    <td>
-                        <input type="text" class="form-control" style="padding: 4px 8px; font-size: 12px; height: 28px; width: 130px; background-color: #f1f2f6; color: #7f8c8d; cursor: not-allowed;" 
-                               value="${timeSb}" placeholder="00:00-24:00" readonly>
                     </td>
                     <td><span style="font-size:12px; color:#555;">${keterangan}</span></td>
                 `;
@@ -949,6 +937,7 @@
             }
 
             const payload = {
+                "NO": database.logs.length + 1,
                 "NOPOL": document.getElementById('nopolInput').value.trim().toUpperCase(),
                 "DRIVER NAME": document.getElementById('driverName').value.trim(),
                 "NO HP": document.getElementById('noHp').value.trim(),
@@ -959,7 +948,6 @@
                 "STATUS 1": document.getElementById('status1Input').value,
                 "UPDATE POSITION": document.getElementById('updatePositionInput').value.trim(),
                 "STATUS 2": document.getElementById('status2Input').value.trim(),
-                "TIME SB": document.getElementById('timeSbInput').value.trim(), 
                 "KETERANGAN": document.getElementById('keteranganInput').value.trim()
             };
 
@@ -972,7 +960,6 @@
                 if(result.status === 'success') {
                     document.getElementById('logForm').reset();
                     document.getElementById('orderDate').valueAsDate = new Date();
-                    document.getElementById('timeSbInput').value = ''; 
                     document.getElementById('nopolStatus').style.display = 'none';
                     fetchDashboardData();
                 } else {
